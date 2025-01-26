@@ -1,0 +1,52 @@
+---
+import {
+  Pagination as ShadcnPagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from './ui/pagination'
+
+const { page, totalPages, sortBy, sortOrder, filterByColor, filterBySize } =
+  Astro.props
+---
+
+<ShadcnPagination>
+  <PaginationContent>
+    {
+      page > 1 && (
+        <PaginationItem>
+          <PaginationPrevious
+            href={`?page=${page - 1}&sortBy=${sortBy}&sortOrder=${sortOrder}&color=${filterByColor || ''}&size=${filterBySize || ''}`}
+            size="sm"
+          />
+        </PaginationItem>
+      )
+    }
+    {
+      Array.from({ length: totalPages }, (_, i) => (
+        <PaginationItem key={i + 1}>
+          <PaginationLink
+            href={`?page=${i + 1}&sortBy=${sortBy}&sortOrder=${sortOrder}&color=${filterByColor || ''}&size=${filterBySize || ''}`}
+            isActive={i + 1 === page}
+            size="sm"
+          >
+            {i + 1}
+          </PaginationLink>
+        </PaginationItem>
+      ))
+    }
+    {
+      page < totalPages && (
+        <PaginationItem>
+          <PaginationNext
+            href={`?page=${page + 1}&sortBy=${sortBy}&sortOrder=${sortOrder}&color=${filterByColor || ''}&size=${filterBySize || ''}`}
+            size="sm"
+          />
+        </PaginationItem>
+      )
+    }
+  </PaginationContent>
+</ShadcnPagination>
+

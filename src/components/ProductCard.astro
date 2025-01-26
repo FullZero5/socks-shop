@@ -1,0 +1,57 @@
+---
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card'
+import type { Product } from '../types/Product'
+import { Image } from 'astro:assets'
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+
+// Функция для изменения расширения
+const changeExtension = (url, newExtension) => {
+  return url.replace(/\.\w+$/, `.${newExtension}`)
+}
+---
+
+<Card className="transition-shadow hover:shadow-md">
+  <CardHeader>
+    <div class="h-56 w-full overflow-hidden">
+      <a href={`/product/${product.slug}`}>
+        <Image
+          class="mx-auto h-full w-full object-contain dark:hidden"
+          src={product.cover}
+          alt={product.name}
+          width={200}
+          height={200}
+        />
+        <Image
+          class="mx-auto hidden h-full w-full object-contain dark:block"
+          src={changeExtension(product.cover, 'png')}
+          alt={product.name}
+          width={200}
+          height={200}
+        />
+      </a>
+    </div>
+  </CardHeader>
+  <CardContent>
+    <a
+      href={`/product/${product.slug}`}
+      class="block text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"
+    >
+      {product.name}
+    </a>
+    <p class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+      {product.category}
+    </p>
+  </CardContent>
+  <CardFooter className="flex items-center justify-end">
+    <p
+      class="text-2xl font-extrabold leading-tight text-gray-900 dark:text-white"
+    >
+      {product.price} ₽
+    </p>
+  </CardFooter>
+</Card>

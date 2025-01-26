@@ -1,0 +1,60 @@
+---
+import { buttonVariants } from './ui/button'
+import ResetIcon from './ResetIcon.astro'
+const {
+  page,
+  sortBy,
+  sortOrder,
+  filterByColor,
+  filterBySize,
+  filterByGender,
+  availableGenders,
+} = Astro.props
+const buildURL = (params) => {
+  const urlParams = new URLSearchParams({
+    page: params.page || page,
+    sortBy: params.sortBy || sortBy,
+    sortOrder: params.sortOrder || sortOrder,
+    color: params.color || filterByColor || '',
+    size: params.size || filterBySize || '',
+    gender: params.gender || filterByGender || '',
+  })
+  return `?${urlParams.toString()}`
+}
+---
+
+<div class="mb-8 flex flex-wrap items-center gap-4">
+  <div class="flex items-center gap-2">
+    <span class="inline-block font-bold">Filter by Gender:</span>
+
+    {/* Кнопка сброса фильтра */}
+    {
+      filterByGender && (
+        <a
+          href={`?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}&color=${filterByColor || ''}&size=${filterBySize || ''}`}
+          class="dark:border-white-600 dark:bg-white-700 dark:hover:bg-white-600 flex items-center justify-center rounded-lg border border-gray-300 bg-gray-100 p-1.5 hover:bg-gray-200"
+        >
+          <ResetIcon class="h-5 w-5" />
+        </a>
+      )
+    }
+  </div>
+
+  {/* Кнопки выбора пола */}
+  <div class="flex flex-wrap gap-2">
+    {
+      availableGenders.map((gender) => (
+        <a
+          aria-label={gender}
+          href={buildURL({ gender, page: 1 })}
+          class={buttonVariants({
+            variant: filterByGender === gender ? 'default' : 'outline',
+            class: 'rounded-md px-4 py-2',
+          })}
+        >
+          {gender}
+        </a>
+      ))
+    }
+  </div>
+</div>

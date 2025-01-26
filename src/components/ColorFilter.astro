@@ -1,0 +1,97 @@
+---
+import ResetIcon from './ResetIcon.astro'
+
+const {
+  page,
+  sortBy,
+  sortOrder,
+  filterByColor,
+  filterBySize,
+  availableColors,
+} = Astro.props
+
+const buildURL = (params) => {
+  const urlParams = new URLSearchParams({
+    page: params.page || page,
+    sortBy: params.sortBy || sortBy,
+    sortOrder: params.sortOrder || sortOrder,
+    color: params.color || filterByColor || '',
+    size: params.size || filterBySize || '',
+  })
+  return `?${urlParams.toString()}`
+}
+---
+
+<div class="attrib color">
+  <div class="header mb-2.5 flex items-center gap-2.5">
+    <p class="inline-block font-bold">Select Color</p>
+    {/* Кнопка сброса фильтра */}
+    {
+      filterByColor && (
+        <a
+          href={`?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}&size=${filterBySize || ''}`}
+          class="dark:border-white-600 dark:bg-white-700 dark:hover:bg-white-600 flex items-center justify-center rounded-lg border border-gray-300 bg-gray-100 p-1.5 hover:bg-gray-200"
+        >
+          <ResetIcon class="h-5 w-5" />
+        </a>
+      )
+    }
+  </div>
+  <div class="options flex flex-wrap gap-2.5">
+    {/* Кнопки выбора цвета */}
+    {
+      availableColors.map((color: string) => (
+        <a
+          title={color}
+          aria-label={color}
+          href={buildURL({ color, page: 1 })}
+          class={`option relative h-8 w-8 cursor-pointer rounded-lg border-2 transition-all ${
+            filterByColor === color ? 'activ' : ''
+          }`}
+          style={{ color: color, borderColor: color }}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<style lang="scss">
+  .option {
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60%;
+      height: 60%;
+      background-color: currentColor;
+      transform: translate(-50%, -50%) scale(0);
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      border: 1px solid currentColor; /* Обводка для видимости */
+      opacity: 0;
+    }
+
+    &.activ {
+      &:before {
+        transform: translate(-50%, -50%) scale(1); /* Квадратик в центре */
+        opacity: 1; /* Появление */
+        animation: pixelate 0.4s ease-in-out; /* Анимация "из пикселей" */
+      }
+    }
+  }
+
+  @keyframes pixelate {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      filter: blur(5px); /* Начальное размытие */
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.2); /* Слегка увеличиваем */
+      filter: blur(2px); /* Уменьшаем размытие */
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1); /* Возвращаем к нормальному размеру */
+      filter: blur(0); /* Убираем размытие */
+    }
+  }
+</style>

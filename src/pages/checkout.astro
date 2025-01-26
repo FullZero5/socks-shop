@@ -1,0 +1,24 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import {
+  CartCheckoutPage,
+  OrderSummary,
+  ShippingPayment,
+} from '../components/сheckout/item-сheckout'
+---
+
+<BaseLayout title="Checkout" description="Checkout page">
+  <main
+    class="container mx-auto my-8 grid grid-cols-1 gap-8 md:grid-cols-[2fr_1fr]"
+  >
+    <div>
+      <h1 class="text-2xl font-bold">Your Cart</h1>
+      <CartCheckoutPage client:load />
+    </div>
+    <div class="space-y-4">
+      <OrderSummary client:load />
+      <div class="border-t py-4"></div>
+      <ShippingPayment client:load />
+    </div>
+  </main>
+</BaseLayout>

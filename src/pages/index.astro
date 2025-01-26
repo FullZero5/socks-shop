@@ -1,0 +1,121 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { getProducts } from '../data'
+import ProductCard from '../components/ProductCard.astro'
+import Pagination from '../components/Pagination.astro'
+import GenderFilter from '../components/GenderFilter.astro'
+import SizeFilter from '../components/SizeFilter.astro'
+import ColorFilter from '../components/ColorFilter.astro'
+import SortFilter from '../components/SortButtons.astro'
+import { parseSizeParam } from '../utility'
+import { availableColors, availableSizes, availableGenders } from '../config'
+
+const page = parseInt(Astro.url.searchParams.get('page') || '1')
+const sortBy = Astro.url.searchParams.get('sortBy') || null
+const sortOrder = Astro.url.searchParams.get('sortOrder') || 'asc'
+const filterByColor = Astro.url.searchParams.get('color') || null
+const filterBySize = parseSizeParam(Astro.url.searchParams.get('size'))
+const filterByGender = Astro.url.searchParams.get('gender') || null
+
+const limit = 10
+const skip = (page - 1) * limit
+
+const productList = getProducts(
+  skip,
+  limit,
+  sortBy,
+  sortOrder,
+  filterByColor,
+  filterBySize,
+  filterByGender,
+)
+const { products, total } = productList
+const totalPages = Math.ceil(total / limit)
+---
+
+<BaseLayout
+  title="Shop Just Socks"
+  description="Just Socks Shop - Buy cool socks online"
+>
+  <section class="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+    <div
+      class="container mx-auto mt-6 grid grid-cols-1 gap-6 px-4 md:grid-cols-4"
+    >
+      <!-- Filters Sidebar -->
+      <aside
+        id="filtersSidebar"
+        class="hidden rounded bg-gray-100 p-4 shadow dark:bg-gray-700 md:col-span-1 md:block"
+      >
+        <h2 class="mb-4 text-xl font-semibold">Filters</h2>
+        <div class="mb-4">
+          <SortFilter
+            {page}
+            {sortBy}
+            {sortOrder}
+            {filterByColor}
+            {filterBySize}
+          />
+        </div>
+        <div class="mb-4">
+          <ColorFilter
+            {page}
+            {sortBy}
+            {sortOrder}
+            {filterByColor}
+            {filterBySize}
+            {availableColors}
+          />
+        </div>
+        <div class="mb-4">
+          <SizeFilter
+            {page}
+            {sortBy}
+            {sortOrder}
+            {filterByColor}
+            {filterBySize}
+            {availableSizes}
+          />
+        </div>
+        <div class="mb-4">
+          <GenderFilter
+            {page}
+            {sortBy}
+            {sortOrder}
+            {filterByColor}
+            {filterBySize}
+            {filterByGender}
+            {availableGenders}
+          />
+        </div>
+      </aside>
+
+      <main
+        id="productsContainer"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:col-span-3 lg:grid-cols-3"
+      >
+        {
+          products.length > 0 ? (
+            products.map((product) => <ProductCard product={product} />)
+          ) : (
+            <div class="w-full py-10 text-center">
+              <p class="text-gray-600">
+                No results found for your query. Please try adjusting the
+                filters.
+              </p>
+            </div>
+          )
+        }
+      </main>
+    </div>
+    <div class="mt-8 flex justify-center">
+      <Pagination
+        {page}
+        {totalPages}
+        {sortBy}
+        {sortOrder}
+        {filterByColor}
+        {filterBySize}
+      />
+    </div>
+  </section>
+</BaseLayout>

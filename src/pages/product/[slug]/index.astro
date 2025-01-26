@@ -1,0 +1,123 @@
+---
+export const prerender = true;
+import {
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
+  BreadcrumbPage,
+} from '../../../components/ui/breadcrumb'
+import { type Product, products } from '../../../data'
+import Layout from '../../../layouts/BaseLayout.astro'
+import ProductCard from '../../../components/ProductCard.astro'
+import { Image } from 'astro:assets'
+import ProductDetails from '../../../components/ProductDetails.jsx'
+
+const { slug } = Astro.params
+
+export function getStaticPaths() {
+  return [
+    ...products.map((product) => ({
+      params: {
+        slug: product.slug,
+      },
+    })),
+  ]
+}
+
+// Находим товар по slug
+const product = products.find((product) => product.slug === slug) as Product
+
+// Если товар не найден, выводим сообщение об ошибке
+if (!product) {
+  throw new Error(`Product with slug "${slug}" not found.`)
+}
+---
+
+<Layout
+  title={product.name}
+  description={product.description}
+  ogImage={product.cover}
+>
+  <div class="container grid items-center gap-4 pb-8 pt-4 md:py-8">
+    <Breadcrumb className="pb-6">
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="/" className="flex items-center gap-2">
+            <svg
+              class="h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+              ></path>
+            </svg>
+            <span>Home</span>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink
+            href={`/category/${product.category}`}
+            aria-disabled="true"
+            className="pointer-events-none text-gray-400 dark:text-gray-500"
+          >
+            {product.category}
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{product.name}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+
+    <!-- Основная информация о товаре -->
+    <div class="flex flex-col gap-6 sm:gap-8 md:flex-row">
+      <!-- Изображение товара -->
+      <div class="h-full max-h-[450px] w-full max-w-[450px]">
+        <Image
+          src={product.cover}
+          alt={product.name}
+          class="h-full w-full rounded-xl border-b object-cover shadow-2xl shadow-gray-200"
+          transition:name={`${slug} image`}
+          width={200}
+          height={200}
+        />
+      </div>
+
+      <!-- Описание товара -->
+      <ProductDetails client:load product={product} />
+    </div>
+
+    <!-- Дополнительный текст -->
+    <div class="py-4 md:py-10">
+      Step into a neon-lit realm where fashion meets the digital frontier. Our
+      boutique is a portal to tomorrow's style, where code and couture collide.
+      Unleash your inner tech fashionista with attire that bridges the gap
+      between reality and the virtual cosmos.
+    </div>
+
+    <h4 class="pb-4 text-lg font-bold">You might also like</h4>
+    <div class="flex flex-wrap justify-center gap-3 sm:justify-center">
+      {
+        products
+          .filter((p) => p.category === product.category && p.id !== product.id)
+          .slice(0, 4)
+          .map((pr) => <ProductCard product={pr} />)
+      }
+    </div>
+  </div>
+</Layout>
+
+<script>
+  document.addEventListener('click', (event) => {
+    if (location.pathname === '/') return
+    if ((event as any)?.target?.tagName === 'A') {
+      document.querySelector('.animate-in')?.classList.add('opacity-0')
+    }
+  })
+</script>
