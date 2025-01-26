@@ -2,6 +2,7 @@
 import HeadSEO from '@/components/HeadSEO.astro'
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
+import { ViewTransitions } from 'astro:transitions'
 
 interface Props {
   title?: string | undefined
@@ -15,6 +16,7 @@ const { title, description, ogImage } = Astro.props
 <html lang="en">
   <head>
     <HeadSEO title={title} description={description} ogImage={ogImage} />
+    <ViewTransitions />
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
     <div class="relative flex min-h-screen flex-col">
@@ -24,5 +26,70 @@ const { title, description, ogImage } = Astro.props
       </main>
       <Footer />
     </div>
+    <style is:global>
+      :root {
+      }
+      html {
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+      }
+      body {
+        background-color: theme(colors.gray.50);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+      .animate-in {
+        animation: animate-in 0.5s ease-in-out;
+      }
+      /* Firefox */
+      * {
+        scrollbar-width: auto;
+        scrollbar-color: #c7c7c7 #ededed;
+      }
+
+      /* Chrome, Edge, and Safari */
+      *::-webkit-scrollbar {
+        width: 15px;
+      }
+
+      *::-webkit-scrollbar-track {
+        background: #ededed;
+      }
+
+      *::-webkit-scrollbar-thumb {
+        background-color: #c7c7c7;
+        border-radius: 5px;
+        border: 2px solid #ffffff;
+      }
+      @keyframes animate-in {
+        0% {
+          opacity: 0;
+          transform: translateY(1rem);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes badgeAnimation {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .badge {
+        animation: badgeAnimation 0.3s ease-in-out; /* Применяем анимацию */
+      }
+    </style>
   </body>
 </html>

@@ -6,12 +6,13 @@ import node from '@astrojs/node'
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: true,
   output: 'server',
   adapter: node({
     mode: 'standalone',
   }),
   site: process.env.CI
-    ? 'https://astro-shadcn-ui-template.vercel.app'
+    ? 'https://socks-shop.vercel.app/'
     : 'http://localhost:4321',
   integrations: [
     react(),
