@@ -12,7 +12,7 @@ export default defineConfig({
     mode: 'standalone',
   }),
   site: process.env.CI
-    ? 'https://astro-shadcn-ui-template.vercel.app'
+    ? 'https://socks-shop.vercel.app/'
     : 'http://localhost:4321',
   integrations: [
     react(),
