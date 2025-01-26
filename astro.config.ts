@@ -6,6 +6,7 @@ import node from '@astrojs/node'
 
 // https://astro.build/config
 export default defineConfig({
+  prefetch: true,
   output: 'server',
   adapter: node({
     mode: 'standalone',
