@@ -1,13 +1,13 @@
 import { SunIcon, MoonIcon } from '@radix-ui/react-icons';
-import { Button } from './ui/button';
-import { useThemeStore } from '../store/themeStorage';
+import { Button } from '../ui/button';
+import { useThemeStore } from '../../store/themeStorage';
 import React from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../ui/tooltip";
 
 export default function ThemeToggle() {
   const { theme, isDark, toggleTheme } = useThemeStore();
