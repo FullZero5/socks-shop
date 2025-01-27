@@ -1,39 +1,39 @@
-import { ShoppingCart, Trash2Icon } from 'lucide-react';
-import { useCartStore } from '../../store/cartStore';
-import { Button } from '@/components/ui/button';
+import { ShoppingCart, Trash2Icon } from 'lucide-react'
+import { useCartStore } from '../../store/cartStore'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { ConfirmationButton } from './confirmation-button';
-import { useEffect, useState } from 'react'; // Добавляем хук useEffect и useState
+} from '@/components/ui/popover'
+import { ConfirmationButton } from './confirmation-button'
+import { useEffect, useState } from 'react' // Добавляем хук useEffect и useState
 
 export function ItemCart() {
-  const { items, removeItem, clearCart } = useCartStore();
-  const [animate, setAnimate] = useState(false); // Состояние для управления анимацией
+  const { items, removeItem, clearCart } = useCartStore()
+  const [animate, setAnimate] = useState(false) // Состояние для управления анимацией
 
   // Общая сумма корзины
   const totalAmount = items.reduce(
     (sum, item) => sum + item.price * item.pieces,
     0,
-  );
+  )
 
   // Функция для удаления товара
   const handleRemoveItem = (itemId, itemsSize) => {
-    removeItem(itemId, itemsSize);
-  };
+    removeItem(itemId, itemsSize)
+  }
 
   const handleCheckout = () => {
-    window.location.href = '/checkout'; // Переход на страницу Checkout
-  };
+    window.location.href = '/checkout' // Переход на страницу Checkout
+  }
 
   // Запуск анимации при изменении количества товаров
   useEffect(() => {
-    setAnimate(true);
-    const timeout = setTimeout(() => setAnimate(false), 300); // Длительность анимации
-    return () => clearTimeout(timeout);
-  }, [items]);
+    setAnimate(true)
+    const timeout = setTimeout(() => setAnimate(false), 300) // Длительность анимации
+    return () => clearTimeout(timeout)
+  }, [items])
 
   return (
     <Popover>
@@ -53,7 +53,9 @@ export function ItemCart() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="mr-2 w-80">
-        <h1 className="border-b pb-3 text-lg font-extrabold animate-in">Cart</h1>
+        <h1 className="border-b pb-3 text-lg font-extrabold animate-in">
+          Cart
+        </h1>
         {items.length > 0 ? (
           <>
             {items.map((item, index) => (
@@ -122,5 +124,5 @@ export function ItemCart() {
         )}
       </PopoverContent>
     </Popover>
-  );
+  )
 }

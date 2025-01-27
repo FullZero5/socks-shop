@@ -5,13 +5,19 @@ import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { Textarea } from '../../components/ui/textarea'
 import { Label } from '../../components/ui/label'
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '../../components/ui/card'
-import { Separator } from "../../components/ui/separator"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from '../../components/ui/card'
+import { Separator } from '../../components/ui/separator'
 import { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar'
 import { Minus, Plus } from 'lucide-react'
 
 export function CartCheckoutPage() {
-  const { items, increaseItemQuantity, decreaseItemQuantity } = useCartStore();
+  const { items, increaseItemQuantity, decreaseItemQuantity } = useCartStore()
 
   if (items.length === 0) {
     return (
@@ -25,7 +31,7 @@ export function CartCheckoutPage() {
           </p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -65,18 +71,18 @@ export function CartCheckoutPage() {
         </Card>
       ))}
     </div>
-  );
+  )
 }
 
 export function OrderSummary() {
-  const { items, clearCart } = useCartStore();
+  const { items, clearCart } = useCartStore()
 
   const subtotal = items.reduce(
     (sum, item) => sum + item.price * item.pieces,
     0,
-  );
-  const tax = subtotal * 0.08; // Налог 8%
-  const total = subtotal + tax;
+  )
+  const tax = subtotal * 0.08 // Налог 8%
+  const total = subtotal + tax
 
   return (
     <Card>
@@ -106,12 +112,12 @@ export function OrderSummary() {
         </CardFooter>
       )}
     </Card>
-  );
+  )
 }
 
 export function ShippingPayment() {
-  const { items } = useCartStore();
-  const { name, telephone, address, setFormField } = useFormStore();
+  const { items } = useCartStore()
+  const { name, telephone, address, setFormField } = useFormStore()
 
   if (items.length === 0) {
     return (
@@ -125,7 +131,7 @@ export function ShippingPayment() {
           </p>
         </CardContent>
       </Card>
-    );
+    )
   }
 
   return (
@@ -169,5 +175,5 @@ export function ShippingPayment() {
         <Button className="w-full">Place Order</Button>
       </CardFooter>
     </Card>
-  );
+  )
 }

@@ -57,7 +57,8 @@ export const useCartStore = create()(
 
         // Удаляем товар, если его количество стало меньше или равно 0
         const filteredItems = updatedItems.filter(
-          (item) => !(item.id === itemId && item.size === size && item.pieces <= 0),
+          (item) =>
+            !(item.id === itemId && item.size === size && item.pieces <= 0),
         )
 
         set({ items: filteredItems })
@@ -84,4 +85,4 @@ export const useFormStore = create()(
       storage: isClient ? storage : undefined, // Используем localStorage только на клиенте
     },
   ),
-);
+)
