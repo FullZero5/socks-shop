@@ -1,7 +1,7 @@
 import React from 'react'
-import { CounterButton } from '../components/counter-button'
-import { Button } from '../components/ui/button'
-import { useCartStore } from '../store/cartStore' // Импортируем новое хранилище
+import { CounterButton } from './counter-button'
+import { Button } from '../ui/button'
+import { useCartStore } from '../../store/cartStore' // Импортируем новое хранилище
 
 export default function Counter({ product, selectedSize }) {
   const [itemCounter, setItemCounter] = React.useState(0) // Локальное состояние для счетчика
